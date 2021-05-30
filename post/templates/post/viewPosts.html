@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>Welcome, {{personfirst}} {{personlast}}</h1>
+<p>You can view posts here.</p>
+
+<form method="POST" action="../likePost">
+    {% csrf_token %}
+{% for item in allposts %}
+    <label>Post Id:</label>
+    {{item.id}}
+    <br>
+    <label>Post owner:</label>
+    {{item.posterid}}
+    <br>
+    <label>Post Title:</label>
+    {{item.title}}
+    <br>
+    <label>Post description:</label>
+    {{item.description}}
+    <br>
+    <button name="like" value={{item.id}}>Like</button>
+    <hr>
+{% endfor %}
+
+
+
+</body>
+</html>
