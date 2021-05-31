@@ -10,4 +10,5 @@ urlpatterns = [
     path("viewPost/", views.viewPost, name="viewpost"),
     path("savePost/", views.savePost, name="savepost"),
     path("likePost", views.likePost, name="likepost"),
+    path("newPost", views.newPost, name="newpost"),
 ]

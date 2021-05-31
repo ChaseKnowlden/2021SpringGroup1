@@ -1,10 +1,14 @@
+from django.http import response
 from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from . import routes
 from .models import Post
 from person.models import Person
 import json
+import requests
+import random
 # Create your views here.
+news_api = "https://newsapi.org/v2/everything?q=bitcoin&apiKey=8bf9d2e3fc0f43dd9af74470803d6384"
 
 
 def mainPage(request):
@@ -102,3 +106,26 @@ def likePost(request):
         return HttpResponseRedirect("/post/viewPost")
 
     return HttpResponseRedirect("/post/viewPost")
+
+
+def newPost(request):
+    newsresponse = requests.get(
+        "https://newsapi.org/v2/top-headlines?country=tr&pageSize=35&apiKey=8bf9d2e3fc0f43dd9af74470803d6384")
+    value = newsresponse.json()
+    size = value["totalResults"]
+    randomNew = random.randint(0, size-1)
+    article = value["articles"][randomNew]
+
+    title = article["title"]
+    description = article["description"]
+    post = Post()
+    if "id" in request.session:
+        post.posterid = request.session["id"]
+    else:
+        post.posterid = request.GET["id"]
+    post.title = title
+    post.description = description
+    post.likeNum = 0
+    post.save()
+
+    return HttpResponse(value["articles"][randomNew])
