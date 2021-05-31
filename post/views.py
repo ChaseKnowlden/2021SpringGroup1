@@ -66,7 +66,38 @@ def likePost(request):
     if request.method == "POST":
         postid = request.POST["like"]
         post = Post.objects.get(id=postid)
-        post.likeNum = post.likeNum + 1
+        likerId = request.session["id"]
+        likers = post.likedBy
+        if len(likers) == 2:
+            post.likeNum = 1
+            post.likedBy = '[' + str(likerId) + ']'
+        elif ',' not in likers:
+            likee = likers[1:-1]
+            if likee == str(likerId):
+                post.likeNum = 0
+                post.likedBy = '[]'
+            else:
+                post.likeNum = 2
+                post.likedBy = likers[0:-1] + ',' + str(likerId) + ']'
+        else:
+            allLikers = likers[1:-1].split(',')
+            alreadyin = False
+            for item in allLikers:
+                if str(likerId) == str(item):
+                    alreadyin = True
+                    break
+            if alreadyin:
+                allLikers.remove(str(likerId))
+                post.likeNum -= 1
+                if len(allLikers) == 1:
+                    post.likedBy = '[' + str(allLikers[0]) + ']'
+                else:
+                    post.likedBy = '[' + ','.join(allLikers) + ']'
+            else:
+                allLikers.append(str(likerId))
+                post.likeNum += 1
+                post.likedBy = '[' + ','.join(allLikers) + ']'
+
         post.save()
         return HttpResponseRedirect("/post/viewPost")
 

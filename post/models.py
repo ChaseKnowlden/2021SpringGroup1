@@ -10,7 +10,7 @@ class Post(models.Model):
     title = models.CharField(max_length=50, verbose_name='Title')
     description = models.TextField(max_length=max, verbose_name='Description')
     likeNum = models.IntegerField()
-    likedBy = models.TextField(max_length=max, default='[]')
+    likedBy = models.TextField(max_length=max, default="[]")
     createdDate = models.DateTimeField(
         auto_now_add=True, verbose_name="Created Date")
 
