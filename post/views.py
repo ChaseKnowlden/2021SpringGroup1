@@ -8,7 +8,7 @@ import json
 import requests
 import random
 # Create your views here.
-news_api = "https://newsapi.org/v2/everything?q=bitcoin&apiKey=8bf9d2e3fc0f43dd9af74470803d6384"
+news_api = "8bf9d2e3fc0f43dd9af74470803d6384"
 
 
 def mainPage(request):
@@ -108,12 +108,12 @@ def likePost(request):
     return HttpResponseRedirect("/post/viewPost")
 
 
-def newPost(request):
+def createDummyPost(request):
     newsresponse = requests.get(
-        "https://newsapi.org/v2/top-headlines?country=tr&pageSize=35&apiKey=8bf9d2e3fc0f43dd9af74470803d6384")
+        "https://newsapi.org/v2/top-headlines?country=tr&pageSize=35&apiKey=" + news_api)
     value = newsresponse.json()
     size = value["totalResults"]
-    randomNew = random.randint(0, size-1)
+    randomNew = random.randint(1, size-1)
     article = value["articles"][randomNew]
 
     title = article["title"]
@@ -127,5 +127,5 @@ def newPost(request):
     post.description = description
     post.likeNum = 0
     post.save()
-
-    return HttpResponse(value["articles"][randomNew])
+# value["articles"][randomNew]
+    return HttpResponse("Your post with title: {0} and description: {1} is created succesfully!".format(title, description))
