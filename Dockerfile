@@ -1,5 +1,5 @@
 FROM python:3.9.5-buster
-
+ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY . .
@@ -10,4 +10,4 @@ EXPOSE 5000
 
 ENTRYPOINT ["python"]
 
-CMD [ "manage.py runserver" ]
+CMD [ "manage.py", "runserver" ]
