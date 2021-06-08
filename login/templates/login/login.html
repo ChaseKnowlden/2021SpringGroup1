@@ -7,10 +7,10 @@
     <form method="POST" action="/">
         {% csrf_token %}
         <label>Firstname:</label>
-        <input name="firstname"></input>
+        <input name="firstname" required></input>
         <br>
         <label>Lastname:</label>
-        <input name="lastname"></input>
+        <input name="lastname" required></input>
         <br>
         <button type="submit" name="login">Login</button>
     </form>

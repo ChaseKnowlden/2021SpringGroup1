@@ -37,12 +37,17 @@ def savePost(request):
         title = request.GET["title"]
         description = request.GET["description"]
         post = Post()
-        post.posterid = request.GET["id"]
+        if "id" in request.session:
+            post.posterid = request.session["id"]
+        elif "id" in request.GET:
+            post.posterid = request.GET["id"]
+        else:
+            return HttpResponse("You need to be logged in to the system or provide a user id!")
         post.title = title
         post.description = description
         post.likeNum = 0
         post.save()
-    return HttpResponseRedirect("/post")
+    return HttpResponseRedirect("..")
 
 
 def viewPost(request):
@@ -121,11 +126,14 @@ def createDummyPost(request):
     post = Post()
     if "id" in request.session:
         post.posterid = request.session["id"]
-    else:
+    elif "id" in request.GET:
         post.posterid = request.GET["id"]
+    else:
+        return HttpResponse("You need to be logged in to the system or provide a user id!")
+
     post.title = title
     post.description = description
     post.likeNum = 0
     post.save()
-# value["articles"][randomNew]
+    # value["articles"][randomNew]
     return HttpResponse("Your post with title: {0} and description: {1} is created succesfully!".format(title, description))
